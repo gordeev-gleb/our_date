@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Квест годовщины</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+        }
+        .container {
+            text-align: center;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 350px;
+        }
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+        input, button {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s, opacity 0.3s;
+        }
+        button:hover:not(:disabled) {
+            background-color: #45a049;
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        #dateScreen, #emojiScreen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+        }
+        #emojiScreen {
+            display: none;
+        }
+        #emojiMessage {
+            font-size: 48px;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="dateScreen">
+            <h1>Введите дату нашей годовщины</h1>
+            <input type="text" id="dateInput" placeholder="ДД.ММ.ГГГГ" maxlength="10">
+            <button id="submitButton" onclick="checkDate()" disabled>Подтвердить</button>
+        </div>
+        <div id="emojiScreen">
+            <h1>Следующая подсказка:</h1>
+            <p id="emojiMessage">🔑🔒📚🪑📦</p>
+        </div>
+    </div>
+
+    <script>
+        const dateInput = document.getElementById('dateInput');
+        const submitButton = document.getElementById('submitButton');
+        const dateScreen = document.getElementById('dateScreen');
+        const emojiScreen = document.getElementById('emojiScreen');
+
+        // Убедимся, что первый экран отображается при загрузке страницы
+        window.onload = function() {
+            dateScreen.style.display = 'flex';
+            emojiScreen.style.display = 'none';
+        }
+
+        dateInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 8) value = value.slice(0, 8);
+            const day = value.slice(0, 2);
+            const month = value.slice(2, 4);
+            const year = value.slice(4);
+            
+            if (value.length > 4) {
+                e.target.value = `${day}.${month}.${year}`;
+            } else if (value.length > 2) {
+                e.target.value = `${day}.${month}`;
+            } else {
+                e.target.value = day;
+            }
+
+            submitButton.disabled = !/^\d{2}\.\d{2}\.\d{4}$/.test(e.target.value);
+        });
+
+        function checkDate() {
+            if (dateInput.value === '24.10.2017') {
+                dateScreen.style.display = 'none';
+                emojiScreen.style.display = 'flex';
+            } else {
+                alert('Неправильная дата. Попробуйте еще раз!');
+            }
+        }
+    </script>
+</body>
+</html>
